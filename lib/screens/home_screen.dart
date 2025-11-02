@@ -43,27 +43,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   void _initializePrayerTimes() {
-    // Coordinates for Gujrat, Pakistan
     final coordinates = Coordinates(32.5731, 74.0789);
-
-    // <<< CORRECT API: use CalculationMethodParameters to get CalculationParameters >>>
     final params = CalculationMethodParameters.ummAlQura();
-
-    // Current local date
     final now = DateTime.now();
 
-    // Create PrayerTimes using named parameters (this is what adhan_dart expects)
     _prayerTimes = PrayerTimes(
       date: now,
       coordinates: coordinates,
       calculationParameters: params,
-      // precision: true, // uncomment if you want second precision
     );
 
-    // Hijri date
     _hijriDate = HijriCalendar.now();
-
-    // Current PST time
     _now = now.toUtc().add(_pstOffset);
   }
 
@@ -107,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmall = screenWidth < 400;
 
-    // Translations
     final t = {
       'fajr': isUrdu ? 'فجر' : 'Fajr',
       'sunrise': isUrdu ? 'طلوع آفتاب' : 'Sunrise',
@@ -133,7 +122,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       appBar: AppBar(
         title: Text(isUrdu ? 'نماز کے اوقات' : 'Prayer Times'),
         leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
+          icon: Image.asset(
+            'assets/icons/menu.png',
+            width: 26,
+            height: 26,
+            color: Colors.white,
+          ),
           onPressed: widget.onMenuPressed,
         ),
         backgroundColor: Colors.green,
@@ -214,28 +208,27 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-  currentIndex: _selectedIndex,
-  selectedItemColor: Colors.white,
-  unselectedItemColor: Colors.white70,
-  backgroundColor: const Color(0xFF1B5E20),
-  onTap: _onBottomNavTap,
-  type: BottomNavigationBarType.fixed,
-  items: [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.settings),
-      label: widget.languageCode == 'ur' ? 'سیٹنگز' : 'Settings',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.calendar_month),
-      label: widget.languageCode == 'ur' ? 'کیلنڈر' : 'Calendar',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.notifications_active),
-      label: widget.languageCode == 'ur' ? 'اطلاعات' : 'Notifications',
-    ),
-  ],
-),
-
+        currentIndex: _selectedIndex,
+        selectedItemColor: null,
+        unselectedItemColor: null,
+        backgroundColor: const Color(0xFF1B5E20),
+        onTap: _onBottomNavTap,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset('assets/icons/settings.png', width: 26, height: 26),
+            label: widget.languageCode == 'ur' ? 'سیٹنگز' : 'Settings',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset('assets/icons/calendar.png', width: 26, height: 26),
+            label: widget.languageCode == 'ur' ? 'کیلنڈر' : 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset('assets/icons/notifications.png', width: 26, height: 26),
+            label: widget.languageCode == 'ur' ? 'اطلاعات' : 'Notifications',
+          ),
+        ],
+      ),
     );
   }
 
@@ -279,4 +272,3 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 }
-

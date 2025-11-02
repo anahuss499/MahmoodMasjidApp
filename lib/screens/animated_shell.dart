@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'home_screen.dart';
+import 'quran_screen.dart'; // make sure the path matches your project
 
 class AnimatedShell extends StatefulWidget {
   final String languageCode;
@@ -150,13 +151,26 @@ class _BouncyMenuItemState extends State<_BouncyMenuItem>
   void _onTap(BuildContext context) async {
     await _controller.forward();
     await _controller.reverse();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${widget.text} ${widget.isUrdu ? 'جلد آرہا ہے!' : 'coming soon!'}'),
-        backgroundColor: Colors.green.shade700,
-      ),
-    );
-    ZoomDrawer.of(context)?.close();
+
+    // Open QuranScreen for the Quran menu
+    if (widget.text == (widget.isUrdu ? 'قرآن' : 'Quran')) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuranScreen(
+            languageCode: widget.isUrdu ? 'ur' : 'en', // ✅ fixed
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${widget.text} ${widget.isUrdu ? 'جلد آرہا ہے!' : 'coming soon!'}'),
+          backgroundColor: Colors.green.shade700,
+        ),
+      );
+      ZoomDrawer.of(context)?.close();
+    }
   }
 
   @override
@@ -174,7 +188,7 @@ class _BouncyMenuItemState extends State<_BouncyMenuItem>
             widget.iconPath,
             width: 32,
             height: 32,
-            color: const Color.fromARGB(179, 10, 4, 4),
+            // ✅ Removed color filter — icons now keep their original color
           ),
           title: Text(
             widget.text,
